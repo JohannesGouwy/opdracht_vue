@@ -1,18 +1,39 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-lg-10 offset-lg-1">
+        <div class="row">
+          <Recipe class="col-12 g-4 col-lg-4" v-for="recipe in recipes" :key="recipe.id" :recipe="recipe"></Recipe>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import Recipe from "@/components/Recipe.vue";
+import RecipesService from "../services/RecipesService";
 
 export default {
   name: "Home",
   components: {
-    HelloWorld
+    Recipe
+  },
+  data() {
+    return {
+      recipes: null
+    };
+  },
+  created() {
+    RecipesService.getRecipes()
+      .then(response => {
+        this.recipes = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 };
 </script>
+<style scoped></style>
